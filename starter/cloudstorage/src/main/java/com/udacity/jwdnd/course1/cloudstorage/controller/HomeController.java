@@ -1,11 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,25 +21,29 @@ public class HomeController {
     private final UserService userService;
     private final EncryptionService encryptionService;
     private final CredentialService credentialService;
-    private NoteService noteService;
+    private final NoteService noteService;
+    private FileService fileService;
 
 
     private List<Credential> credentials;
     private List<Note> notes;
+    private List<File> files;
     List<String> decryptedPasswords;
 
     public HomeController(UserService userService, EncryptionService encryptionService, CredentialService credentialService,
-                          NoteService noteService) {
+                          NoteService noteService, FileService fileService) {
         this.userService = userService;
         this.encryptionService = encryptionService;
         this.credentialService = credentialService;
         this.noteService = noteService;
+        this.fileService = fileService;
     }
 
     @PostConstruct
     public void postConstruct() {
         credentials = new ArrayList<>();
         notes = new ArrayList<>();
+        files = new ArrayList<>();
         decryptedPasswords = new ArrayList<>();
     }
 
@@ -51,6 +53,7 @@ public class HomeController {
 
         credentials = credentialService.getCredentialsByUserId(userById);
         notes = noteService.getNotesByUserId(userById);
+        files = fileService.getFilesByUserId(userById);
         decryptedPasswords = credentialService.getDecryptedPasswords(userById);
 
         model.addAttribute("credential", new Credential());
@@ -59,6 +62,7 @@ public class HomeController {
         model.addAttribute("credentialService", credentialService);
         model.addAttribute("credentials", credentials);
         model.addAttribute("notes", notes);
+        model.addAttribute("files",files);
 
         return "home";
     }
