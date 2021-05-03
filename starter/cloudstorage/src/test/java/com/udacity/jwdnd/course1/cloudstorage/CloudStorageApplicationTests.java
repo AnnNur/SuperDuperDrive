@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.pages.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
@@ -135,14 +134,7 @@ class CloudStorageApplicationTests {
 
     @Test
     public void should_EditNote_IfUpdatedNoteProperties() {
-        User user = addTestUser();
-        Note note = new Note();
-        note.setUserId(user.getUserId());
-        note.setNoteTitle(TEST_NOTE_TITLE);
-        note.setNoteDescription(TEST_NOTE_DESCRIPTION);
-
-        noteService.addNote(note, user.getUserId());
-        loginAndSubmitTestUser(user);
+        loginUserWithNoteAdded();
         notePage.changeToNotesTab();
         notePage.updateNote(TEST_NOTE_TITLE_EDITED, TEST_NOTE_DESCRIPTION_EDITED);
         Assertions.assertEquals(TEST_NOTE_TITLE_EDITED, notePage.getNoteTitle());
@@ -151,19 +143,21 @@ class CloudStorageApplicationTests {
 
     @Test
     public void should_DeleteNoteFromPage_IfDeleteNoteBtnClicked() {
-        User user = addTestUser();
-        loginAndSubmitTestUser(user);
-        Note note = new Note();
-        note.setUserId(user.getUserId());
-        note.setNoteTitle(TEST_NOTE_TITLE);
-        note.setNoteDescription(TEST_NOTE_DESCRIPTION);
-      //  noteService.addNote(note, user.getUserId()); //new changes
-        notePage.addNote(note.getNoteTitle(),note.getNoteDescription());
-
+        loginUserWithNoteAdded();
+        notePage.changeToNotesTab();
         notePage.deleteNote();
         notePage.changeToNotesTab();
         Assertions.assertEquals(0, notePage.getNoteElementsCount());
         Assertions.assertThrows(NoSuchElementException.class, () -> notePage.getNoteTitle());
+    }
+
+    private void loginUserWithNoteAdded() {
+        User user = addTestUser();
+        loginAndSubmitTestUser(user);
+        notePage.changeToNotesTab();
+        notePage.addNote(TEST_NOTE_TITLE, TEST_NOTE_DESCRIPTION);
+        notePage.logoutUser();
+        loginAndSubmitTestUser(user);
     }
     //-----------------------------------------------------------------------------------------------------
     //endregion
@@ -186,15 +180,8 @@ class CloudStorageApplicationTests {
 
     @Test
     public void should_EditCredential_IfUpdatedCredentialProperties(){
-        User user = addTestUser();
-        loginAndSubmitTestUser(user);
-        Credential cred = new Credential();
-        cred.setUrl(TEST_CREDENTIAL_URL);
-        cred.setUsername(TEST_USERNAME);
-        cred.setPassword(TEST_PASSWORD);
-        cred.setUserId(user.getUserId());
-        credentialPage.addCredential(cred.getUrl(), cred.getUsername(), cred.getPassword());
-
+        loginUserWithCredentialAdded();
+        credentialPage.changeToCredentialsTab();
         credentialPage.updateCredential(TEST_CREDENTIAL_URL_UPDATED, TEST_CREDENTIAL_USERNAME_EDITED, TEST_CREDENTIAL_PASSWORD_EDITED);
         Assertions.assertEquals(TEST_CREDENTIAL_URL_UPDATED, credentialPage.getCredentialUrl());
         Assertions.assertEquals(TEST_CREDENTIAL_USERNAME_EDITED, credentialPage.getCredentialUsername());
@@ -207,19 +194,20 @@ class CloudStorageApplicationTests {
 
     @Test
     public void should_DeleteCredentialFromPage_IfDeleteCredentialBtnClicked() {
-        User user = addTestUser();
-        loginAndSubmitTestUser(user);
-        Credential credential = new Credential();
-        credential.setUrl(TEST_CREDENTIAL_URL);
-        credential.setUsername(TEST_USERNAME);
-        credential.setPassword(TEST_PASSWORD);
-        credential.setUserId(user.getUserId());
-        credentialPage.addCredential(credential.getUrl(), credential.getUsername(), credential.getPassword());
-
+        loginUserWithCredentialAdded();
         credentialPage.changeToCredentialsTab();
         credentialPage.deleteCredential();
         Assertions.assertEquals(0, credentialPage.getCredentialElementsCount());
         Assertions.assertThrows(NoSuchElementException.class, () -> credentialPage.getCredentialUrl());
+    }
+
+    private void loginUserWithCredentialAdded() {
+        User user = addTestUser();
+        loginAndSubmitTestUser(user);
+        credentialPage.changeToCredentialsTab();
+        credentialPage.addCredential(TEST_CREDENTIAL_URL, TEST_USERNAME, TEST_PASSWORD);
+        credentialPage.logoutUser();
+        loginAndSubmitTestUser(user);
     }
     //-----------------------------------------------------------------------------------------------------
     //endregion

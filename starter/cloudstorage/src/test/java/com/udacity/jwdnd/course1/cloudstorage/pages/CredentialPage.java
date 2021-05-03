@@ -119,4 +119,9 @@ public class CredentialPage extends DriverHelper {
         sleepThread(1);
         waitForPageElementsToBeClickable();
     }
+
+    public void logoutUser(){
+        waitForElementToBeClickable(logoutBtn);
+        clickElement(logoutBtn);
+    }
 }
