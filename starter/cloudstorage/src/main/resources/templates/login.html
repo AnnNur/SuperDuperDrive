@@ -12,7 +12,7 @@
         <div class="container justify-content-center w-25 p-3 border border-light rounded bg-light" style="margin-top: 5em;">
             <h1 class="h3 mb-3 fw-normal text-center" style="color: #0068d8">SuperDuperDrive</h1>
             <hr/>
-            <h1 class="h3 mb-3 fw-normal text-center">Login</h1>
+            <h1 id="headerLogin" class="h3 mb-3 fw-normal text-center">Login</h1>
             <form action="#" th:action="@{/login}" method="POST">
                 <div id="error-msg" th:if="${param.error}" class="alert alert-danger">
                     Invalid username or password

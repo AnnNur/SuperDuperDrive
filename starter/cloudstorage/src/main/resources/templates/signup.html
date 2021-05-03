@@ -13,7 +13,7 @@
 
             <h1 class="h3 mt-3 mb-4 fw-normal text-center align-middle" style="color: #0068d8;">SuperDuperDrive</h1>
             <hr/>
-            <h1 class="h3 mb-3 fw-normal text-center">Sign Up</h1>
+            <h1 id="headerSignup" class="h3 mb-3 fw-normal text-center">Sign Up</h1>
             <form action="#" th:action="@{/signup}" method="POST">
                 <div id="success-msg" th:if="${signupSuccess}" class="alert alert-success">
                     You successfully signed up! Please continue to the <a id="login-link" th:href="@{/login}">login</a> page.
@@ -45,7 +45,7 @@
                 <button id="submit-button" type="submit" class="w-50 btn btn-lg btn-primary text-center">Sign Up</button>
                 </div>
                 <div class="form-group mt-4 mb-0">
-                    <label><a class="text-primary text-sm" th:href="@{/login}">Back to Login</a></label>
+                    <label><a id="backToLoginLink" class="text-primary text-sm" th:href="@{/login}">Back to Login</a></label>
                 </div>
             </form>
         </div>
