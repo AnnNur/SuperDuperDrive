@@ -5,19 +5,15 @@ import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.pages.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
@@ -28,9 +24,9 @@ class CloudStorageApplicationTests {
     @Autowired
     NoteService noteService;
 
-	@LocalServerPort
+    @LocalServerPort
     private int port;
-    
+
     private WebDriver driver;
     private LoginPage loginPage;
     private SignupPage signupPage;
@@ -50,51 +46,46 @@ class CloudStorageApplicationTests {
     public static final String TEST_CREDENTIAL_USERNAME_EDITED = "testUserName edited";
     public static final String TEST_CREDENTIAL_PASSWORD_EDITED = "1234 edited";
 
-	@BeforeAll
-	static void beforeAll() {
+    @BeforeAll
+    static void beforeAll() {
         WebDriverManager.chromedriver().setup();
-	}
+    }
 
-	@BeforeEach
-	public void beforeEach() {
+    @BeforeEach
+    public void beforeEach() {
         this.driver = new ChromeDriver();
         loginPage = new LoginPage(driver);
         signupPage = new SignupPage(driver);
         homePage = new HomePage(driver);
         notePage = new NotePage(driver);
         credentialPage = new CredentialPage(driver);
-	}
-
-	@AfterEach
-	public void afterEach() {
-		if (this.driver != null) {
-			driver.quit();
-		}
     }
-    
+
+    @AfterEach
+    public void afterEach() {
+        if (this.driver != null) {
+            driver.quit();
+        }
+    }
+
     @Test
-	public void verifyUnauthorizedAccessToHome() {
+    public void verifyUnauthorizedAccessToHome() {
         driver.get("http://localhost:" + this.port + "/home");
         Assertions.assertNotEquals("Home", driver.getTitle());
     }
 
     @Test
     public void should_EnableSignupAndLogin_ForNewUser_WithCorrectCredentials() {
-	    //region Signup
+        //region Signup
         //-----------------------------------------------------------------------------------------------------
         driver.get("http://localhost:" + this.port + "/signup");
         signupPage.signupUserAndSubmit(TEST_FIRSTNAME, TEST_LASTNAME, TEST_USERNAME, TEST_PASSWORD);
         Assertions.assertTrue(signupPage.isSuccessMsgVisible());
-
-        // verify if userName is available
-        signupPage.signupUserAndSubmit(RandomStringUtils.randomAlphabetic(3), RandomStringUtils.randomAlphabetic(3), TEST_USERNAME, RandomStringUtils.randomAlphanumeric(4));
-        Assertions.assertTrue(signupPage.isErrorMsgVisible());
         //-----------------------------------------------------------------------------------------------------
         //endregion
 
         //region login
         //-----------------------------------------------------------------------------------------------------
-        signupPage.backToLogin();
 
         //verify if username is valid
         loginPage.loginUserAndSubmit(RandomStringUtils.randomAlphabetic(3), TEST_PASSWORD);
@@ -179,7 +170,7 @@ class CloudStorageApplicationTests {
     }
 
     @Test
-    public void should_EditCredential_IfUpdatedCredentialProperties(){
+    public void should_EditCredential_IfUpdatedCredentialProperties() {
         loginUserWithCredentialAdded();
         credentialPage.changeToCredentialsTab();
         credentialPage.updateCredential(TEST_CREDENTIAL_URL_UPDATED, TEST_CREDENTIAL_USERNAME_EDITED, TEST_CREDENTIAL_PASSWORD_EDITED);

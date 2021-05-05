@@ -22,7 +22,7 @@ public class HomeController {
     private final EncryptionService encryptionService;
     private final CredentialService credentialService;
     private final NoteService noteService;
-    private FileService fileService;
+    private final FileService fileService;
 
 
     private List<Credential> credentials;

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteService {
@@ -27,6 +28,11 @@ public class NoteService {
 
     public int deleteNote(Integer noteId) {
         return noteMapper.deleteNote(noteId);
+    }
+
+    public boolean isUniqueNote(Integer userId, String noteTitle, String noteDescription) {
+        Optional<Note> note = Optional.ofNullable(noteMapper.uniqueNote(userId, noteTitle, noteDescription));
+        return (note.isEmpty());
     }
 
     public List<Note> getNotesByUserId(Integer userId) {

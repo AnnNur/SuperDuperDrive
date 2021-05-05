@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,5 +56,10 @@ public class CredentialService {
                 .filter(Objects::nonNull)
                 .map(credential -> encryptionService.decryptValue(credential.getPassword(), credential.getKey()))
                 .collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+    public boolean isUniqueUserName(Integer userId, String userName) {
+        Optional<Credential> credential = Optional.ofNullable(credentialMapper.uniqueUserName(userId, userName));
+        return (credential.isEmpty());
     }
 }

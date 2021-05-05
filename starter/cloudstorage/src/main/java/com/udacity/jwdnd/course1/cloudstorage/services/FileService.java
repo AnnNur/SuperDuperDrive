@@ -42,7 +42,6 @@ public class FileService {
     public boolean isUniqueFileName(Integer UserId, String FileName) {
         Optional<File> file = Optional.ofNullable(fileMapper.uniqueFileName(UserId, FileName));
         return (file.isEmpty());
-
     }
 
     public List<File> getFilesByUserId(int userId) {

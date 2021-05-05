@@ -11,7 +11,7 @@ public class SignupPage extends DriverHelper {
     private final By inputUsername = By.id("inputUsername");
     private final By inputPassword = By.id("inputPassword");
     private final By signupBtn = By.id("submit-button");
-    private final By signUpSuccessMsg = By.id("success-msg");
+    private final By signUpSuccessMsg = By.id("signup-success-msg");
     private final By signUpErrorMsg = By.id("error-msg");
 
     public SignupPage(WebDriver driver) {
